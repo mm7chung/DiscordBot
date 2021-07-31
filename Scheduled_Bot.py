@@ -2,7 +2,10 @@ import discord
 import os
 import requests
 import random
-import ListFunctionTest as LFT
+import schedule
+import time
+import asyncio
+
 
 token = os.environ['DISCORDBOTTOKEN']
 
@@ -11,27 +14,10 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+    await client.get_channel(865764705167605781).send(getLeetCodeProblem())
+    await client.logout()
+    await client.close()
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
-    
-    if message.content.startswith('$goaway'):
-        await message.channel.send('Go Fuck Yourself')
-
-    if message.content.startswith('$leetcode'):
-        await message.channel.send(getLeetCodeProblem())
-
-    if message.content.startswith('$findleetcode'):
-        name = message.content[len('$findleetcode') + 2:]
-        problemTitleSlug = LFT.findNamedProblem(name)
-        await message.channel.send('**Here are the problems: **')
-        for element in problemTitleSlug:
-            await message.channel.send(element[0] + ": " + 'https://leetcode.com/problems/' + element[1])
 
 def randDifficulty():
     difficulty = ""
@@ -212,8 +198,3 @@ object = {
 }
 someList = [{"name": "object1"}, {"name": "object2"}]
 """
-
-
-for line in open("ProblemList.txt"):
-    problemList = line.split(', ')
-    TitleSlug = problemList[1]
