@@ -32,6 +32,29 @@ async def on_message(message):
         await message.channel.send('**Here are the problems: **')
         for element in problemTitleSlug:
             await message.channel.send(element[0] + ": " + 'https://leetcode.com/problems/' + element[1])
+    if message.content.startswith('$ideas'):
+        await message.channel.send(makeSentence())
+
+def readList(fileName):
+    wordList = []
+    for line in open(fileName):
+        wordList.append(line.strip())
+    return wordList
+
+verbs = readList('Verbs.list')
+nouns = readList('Nouns.list')
+adjectives = readList('Adjective.list')
+prepositions = readList('Prepositions.list')
+adverbs = readList('Adverbs.list')
+
+def pickWord(wordList):
+    numOfWords = len(wordList)
+    wordNum = random.randint(0, numOfWords - 1)
+    return wordList[wordNum]
+
+def makeSentence():
+    return pickWord(adjectives) + " " + pickWord(nouns) + " " + pickWord(adverbs) + " " + pickWord(verbs) + " " + pickWord(prepositions) + " " + pickWord(nouns)
+
 
 def randDifficulty():
     difficulty = ""
